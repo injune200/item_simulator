@@ -25,7 +25,6 @@ const Item_Schema = new mongoose.Schema({ //item 스키마
         type: item_stat,
         required: true
     }
-
 })
 
 export default mongoose.model('Item_infor', Item_Schema);

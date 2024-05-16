@@ -3,10 +3,18 @@ import Item_infor from '../schemas/item.schemas.js'
 
 const router = express.Router();
 
-router.get("/item", async(req,res,next) =>{ //아이템 전체 조회 개발 때문에 일단 넣음
-    const items = await Item_infor.find().sort("-item_code").exec();//.select({item_stat : 0})
+router.get("/item", async(req,res,next) =>{ //아이템 아이디와 이름 전체 조회 
+    const items = await Item_infor.find({},{_id : 0, item_name : 1, item_code : 1}).sort("item_code").exec();
 
     return res.status(200).json(items);
+})
+
+router.get("/item/:item_code", async(req,res,next) => { // 특정 아이템 상세 조회
+    const {item_code} = Number(req.params);
+
+    const item = await Item_infor.findOne(item_code).select({_id : 0, item_code : 1, item_name : 1, 'item_stat.health' : 1, 'item_stat.power' : 1}).sort("item_code").exec();
+
+    return res.status(200).json(item);
 })
 
 router.post("/item", async(req,res,next) =>{ // 아이템 생성
@@ -19,10 +27,10 @@ router.post("/item", async(req,res,next) =>{ // 아이템 생성
     const item = new Item_infor({item_code,item_name, item_stat})
     await item.save();
     
-    return res.status(201).json({item : item});
+    return res.status(201).json();
 })
 
-router.patch("/item/:item_code", async(req,res,next) =>{
+router.patch("/item/:item_code", async(req,res,next) =>{ // 아이템 수정
     const {item_code} = Number(req.params);
     const {item_name, item_stat} = req.body;
 
@@ -33,15 +41,7 @@ router.patch("/item/:item_code", async(req,res,next) =>{
 
     await current_item.save();
 
-    return res.status(200).json({Message : current_item})
-})
-
-router.get("/item/:item_code", async(req,res,next) =>{
-    const {item_code} = Number(req.params);
-
-    const item = await Item_infor.findOne(item_code).exec();
-
-    return res.status(200).json({item});
+    return res.status(200).json()
 })
 
 export default router;
