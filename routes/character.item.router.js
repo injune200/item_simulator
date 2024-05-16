@@ -15,13 +15,13 @@ router.get("/character/:character_id/equip_item", async (req, res, next) => {
       })
       .exec();
 
-      if(character_item.equip_item.length ==0){
-        return res.status(404).json({Message : "현재 장착중인 아이템이 없습니다."});
-      }else{
-        return res.status(200).json(character_item);
-      }
-
-    
+    if (character_item.equip_item.length == 0) {
+      return res
+        .status(404)
+        .json({ Message: "현재 장착중인 아이템이 없습니다." });
+    } else {
+      return res.status(200).json(character_item);
+    }
   } catch (error) {
     next(error);
   }

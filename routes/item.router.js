@@ -56,7 +56,7 @@ router.post("/item", async (req, res, next) => {
     const item = new Item_infor({ item_code, item_name, item_stat });
     await item.save();
 
-    return res.status(201).json({Message: "아이템 생성 완료"});
+    return res.status(201).json({ Message: "아이템 생성 완료" });
   } catch (error) {
     next(error);
   }
@@ -68,14 +68,16 @@ router.patch("/item/:item_code", async (req, res, next) => {
     const { item_code } = req.params;
     const { item_name, item_stat } = req.body;
 
-    const current_item = await Item_infor.findOne({item_code: item_code}).exec();
+    const current_item = await Item_infor.findOne({
+      item_code: item_code,
+    }).exec();
 
     current_item.item_name = item_name;
     current_item.item_stat = item_stat;
 
     await current_item.save();
 
-    return res.status(200).json({Message: "아이템 수정 완료"});
+    return res.status(200).json({ Message: "아이템 수정 완료" });
   } catch (error) {
     next(error);
   }
